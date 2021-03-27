@@ -7,13 +7,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=trojan
-PKG_VERSION:=1.14.1
-PKG_RELEASE:=2
+PKG_VERSION:=1.16.0
+PKG_RELEASE:=1
 
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=https://github.com/trojan-gfw/trojan.git
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
-PKG_SOURCE_VERSION:=c3a17f2b37dc2397c34cd55832e4a612b9e089c1
+PKG_SOURCE_VERSION:=8606b7110fe79f8ab02d60c897f87ffb0a9b23f0
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-$(PKG_SOURCE_VERSION).tar.gz
 
 CMAKE_INSTALL:=1
@@ -41,17 +41,20 @@ TARGET_LDFLAGS += -Wl,--gc-sections
 
 CMAKE_OPTIONS += \
 	-DENABLE_MYSQL=OFF \
-	-DENABLE_SSL_KEYLOG=ON \
 	-DENABLE_NAT=ON \
+	-DENABLE_REUSE_PORT=ON \
+	-DENABLE_SSL_KEYLOG=ON \
+	-DENABLE_TLS13_CIPHERSUITES=ON \
 	-DFORCE_TCP_FASTOPEN=OFF \
 	-DSYSTEMD_SERVICE=OFF \
 	-DOPENSSL_USE_STATIC_LIBS=FALSE \
-	-DBoost_DEBUG=OFF \
+	-DBoost_DEBUG=ON \
 	-DBoost_NO_BOOST_CMAKE=ON
 
 define Package/trojan
 	SECTION:=net
 	CATEGORY:=Network
+	SUBMENU:=Web Servers/Proxies
 	TITLE:=An unidentifiable mechanism that helps you bypass GFW
 	URL:=https://github.com/trojan-gfw/trojan
 	DEPENDS:=+libpthread +libstdcpp +libopenssl \
@@ -64,3 +67,4 @@ define Package/trojan/install
 endef
 
 $(eval $(call BuildPackage,trojan))
+
